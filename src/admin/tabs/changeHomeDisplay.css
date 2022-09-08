@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Flex&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+#change-home-display-con {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+@media only screen and (max-width: 550px){
+  #box {
+    width: 40ch;
+  }
+}

@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Flex&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+#admin-sign-in-con {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  background-color: #fff;
+  align-items: center;
+}
+
+#admin-sign-in-form {
+  flex: 50%;
+  text-align: center;
+  padding: 0px 15vw;
+}
+
+#admin-sign-in-aside {
+  flex: 50%;
+  height: 100vh;
+  background-color: #4333FF;
+  color: white;
+  font-family: monospace;
+  display: grid;
+  place-items: center;
+  font-size: 1.2rem;
+  padding: 25vh 0px;
+  font-weight: 900;
+}
+
+@media only screen and (max-width: 550px){
+  #admin-sign-in-aside {
+    display: none;
+  }
+}
