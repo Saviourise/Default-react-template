@@ -501,6 +501,9 @@ const Products = () => {
                     disabled={type === "" ? true : false}
                   >
                     <MenuItem value={"spice"}>Spices</MenuItem>
+                    <MenuItem value={"bakery"}>Bakery</MenuItem>
+                    <MenuItem value={"wine"}>Wine</MenuItem>
+                    <MenuItem value={"snacks"}>Snacks</MenuItem>
                     <MenuItem value={"vegetables"}>Vegetables</MenuItem>
                     <MenuItem value={"commodities"}>Commodities</MenuItem>
                     <MenuItem value={"beverages"}>Beverages</MenuItem>
