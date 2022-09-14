@@ -81,19 +81,15 @@ const UpdateProduct = () => {
     }
     try {
       await axios
-        .post(
-          apiUrl + "/update/products",
-          formData,
-          singleFileOptions
-        )
+        .post(apiUrl + "update/products", formData, singleFileOptions)
         .then((data) => {
           setMess(data.data);
           setSeverity("success");
           setOpenAlert(true);
         })
         .catch((err) => {
-          setMess(err.message);
-          setSeverity("erro");
+          setMess("could not update product, please try again");
+          setSeverity("error");
           setOpenAlert(true);
           console.log(err);
         });
