@@ -29,9 +29,9 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 const apiUrl = process.env.REACT_APP_API_URL + "api/";
 
 const Transactions = () => {
-  const [transactions, setTransactions] = useState([]);
-  const [pendingTransactions, setPendingTransactions] = useState([]);
-  const [confirmedTransactions, setConfirmedTransactions] = useState([]);
+  const [, setTransactions] = useState([]);
+  const [, setPendingTransactions] = useState([]);
+  const [, setConfirmedTransactions] = useState([]);
   const [rows, setRows] = useState([]);
   const [data, setData] = useState([]);
   const [open, setOpen] = React.useState(false);

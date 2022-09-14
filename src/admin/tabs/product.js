@@ -289,7 +289,7 @@ const Products = () => {
     formData.append("type", type);
     formData.append("negotiable", negotiable);
     formData.append("listItems", JSON.stringify(listItems));
-    console.log(listItems);
+    // console.log(listItems);
     await products(formData, singleFileOptions)
       .then((data) => {
         setCateg("");

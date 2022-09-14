@@ -61,7 +61,7 @@ const AdminSignin = () => {
         }
 
         if (data.token) {
-          return navigate(`/admin/overview`, { state: data.token });
+          return navigate(`/admin`, { state: data.token });
         }
       })
       .catch((err) => {

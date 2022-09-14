@@ -7,13 +7,14 @@ import Stack from "@mui/material/Stack";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import ChangeHomeDisplay from "./tabs/changeHomeDisplay";
+// import ChangeHomeDisplay from "./tabs/changeHomeDisplay";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import Products from "./tabs/product";
 import Overview from "./tabs/overview";
 import Transactions from "./tabs/transaction";
+import UpdateProduct from "./tabs/product2";
 
 const Admin = () => {
   const stack = useRef(null);
@@ -93,71 +94,57 @@ const Admin = () => {
               aria-label="scrollable force tabs example"
               selectionFollowsFocus
             >
-              <Tab
-                label="Overview"
-                onFocus={() => navigate("/admin/overview", { state: token })}
-                value="overview"
-              />
-              <Tab
-                label="Add / Remove product"
-                onFocus={() => navigate("/admin/product", { state: token })}
-                value="product"
-              />
-              <Tab
+              <Tab label="Overview" value="overview" />
+              <Tab label="Add / Remove product" value="product" />
+              <Tab label="Update product" value="product2" />
+              {/* <Tab
                 label="Customer care"
                 onFocus={() =>
                   navigate("/admin/customercare", { state: token })
                 }
                 value="customercare"
-              />
-              <Tab
+              /> */}
+              {/* <Tab
                 label="Change home display"
                 onFocus={() =>
                   navigate("/admin/changehomedisplay", { state: token })
                 }
                 value="changehomedisplay"
-              />
-              <Tab
-                label="Add / Remove Admin"
-                onFocus={() =>
-                  navigate("/admin/admincontrol", { state: token })
-                }
-                value="admincontrol"
-              />
-              <Tab
-                label="Transactions"
-                onFocus={() =>
-                  navigate("/admin/transactions", { state: token })
-                }
-                value="transactions"
-              />
+              /> */}
+              <Tab label="Add / Remove Admin" value="admincontrol" />
+              <Tab label="Transactions" value="transactions" />
               <Tab
                 label="Affiliates"
                 onFocus={() => navigate("/admin/affiliates", { state: token })}
                 value="affiliates"
               />
-              <Tab
+              {/* <Tab
                 label="Settings"
                 onFocus={() => navigate("/admin/settings", { state: token })}
                 value="settings"
-              />
+              /> */}
               <Tab
                 label="Log Out"
                 onFocus={() => navigate("/admin", { state: null })}
               />
             </TabList>
           </Box>
-          <TabPanel value="changehomedisplay">
+          {/* <TabPanel value="changehomedisplay">
             <ChangeHomeDisplay />
-          </TabPanel>
+          </TabPanel> */}
           <TabPanel value="overview">
             <Overview />
           </TabPanel>
-          <TabPanel value="settings">Settings</TabPanel>
+          {/* <TabPanel value="settings">Settings</TabPanel> */}
           <TabPanel value="admincontrol">Admin Control</TabPanel>
-          <TabPanel value="transactions"><Transactions /> </TabPanel>
+          <TabPanel value="transactions">
+            <Transactions />{" "}
+          </TabPanel>
+          <TabPanel value="product2">
+            <UpdateProduct />{" "}
+          </TabPanel>
           <TabPanel value="affiliates">Affiliates</TabPanel>
-          <TabPanel value="customercare">Customercare</TabPanel>
+          {/* <TabPanel value="customercare">Customercare</TabPanel> */}
           <TabPanel value="product">
             <Products />
           </TabPanel>

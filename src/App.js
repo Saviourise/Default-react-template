@@ -12,7 +12,7 @@ function App() {
     <Router className="App">
       <Routes>
         <Route path="/" element={<AdminSignin />} />
-        <Route path="/admin" exact element={<AdminSignin />} />
+        {/* <Route path="/" exact element={<AdminSignin />} /> */}
         {/* <Route path="/signup" exact element={<Signup />} />
         <Route path="/signin" exact element={<SignIn />} /> */}
         {/* <Route path="/products" exact element={<ProductPage />} />
@@ -22,7 +22,7 @@ function App() {
           exact
           element={<SingleProduct />}
         /> */}
-        <Route path="/admin/:tab" exact element={<Admin />} />
+        <Route path="/admin" exact element={<Admin />} />
       </Routes>
     </Router>
   );
