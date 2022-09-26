@@ -72,7 +72,7 @@ const UpdateProduct = () => {
     for (let el in product) {
       if (el === "images") {
         for (let i = 0; i < product[el].length; i++) {
-          console.log(product[el][i]);
+          // console.log(product[el][i]);
           formData.append("imgs", product[el][i]);
         }
       }

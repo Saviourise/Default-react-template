@@ -7,7 +7,7 @@ import Stack from "@mui/material/Stack";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-// import ChangeHomeDisplay from "./tabs/changeHomeDisplay";
+import Blog from "./tabs/blog";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
@@ -118,11 +118,11 @@ const Admin = () => {
                 onFocus={() => navigate("/admin/affiliates", { state: token })}
                 value="affiliates"
               />
-              {/* <Tab
-                label="Settings"
-                onFocus={() => navigate("/admin/settings", { state: token })}
-                value="settings"
-              /> */}
+              <Tab
+                label="Blog"
+                onFocus={() => navigate("/admin/blog", { state: token })}
+                value="blog"
+              />
               <Tab
                 label="Log Out"
                 onFocus={() => navigate("/admin", { state: null })}
@@ -135,7 +135,7 @@ const Admin = () => {
           <TabPanel value="overview">
             <Overview />
           </TabPanel>
-          {/* <TabPanel value="settings">Settings</TabPanel> */}
+          <TabPanel value="blog"><Blog /></TabPanel>
           <TabPanel value="admincontrol">Admin Control</TabPanel>
           <TabPanel value="transactions">
             <Transactions />{" "}

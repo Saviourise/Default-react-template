@@ -13,8 +13,18 @@ export const uploadCarousel = async (data, options) => {
 export const products = async (data, options) => {
   try
   {
-    console.log(data)
+    // console.log(data)
     await axios.post( apiUrl + "upload/products", data, options );
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const addBlog = async (data, options) => {
+  try {
+    await axios.post("http://localhost:4000/blog",
+      data
+    );
   } catch (error) {
     throw error;
   }

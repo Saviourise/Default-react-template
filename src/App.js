@@ -23,6 +23,7 @@ function App() {
           element={<SingleProduct />}
         /> */}
         <Route path="/admin" exact element={<Admin />} />
+        <Route path="/admin/:tab" exact element={<Admin />} />
       </Routes>
     </Router>
   );
