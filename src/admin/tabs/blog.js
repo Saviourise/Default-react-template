@@ -95,12 +95,12 @@ const Blog = () => {
           message: "Blog added successfully",
           severity: "success",
         });
-        // setFormData({
-        //   title: "",
-        //   description: "",
-        //   author: "",
-        //   file: [],
-        // });
+        setFormData({
+          title: "",
+          description: "",
+          author: "",
+          file: [],
+        });
       })
       .catch((error) => {
         setAlert({
