@@ -22,7 +22,7 @@ export const products = async (data, options) => {
 
 export const addBlog = async (data, options) => {
   try {
-    await axios.post("http://localhost:4000/blog",
+    await axios.post(process.env.REACT_APP_API_URL + "/blog",
       data
     );
   } catch (error) {
