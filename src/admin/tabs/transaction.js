@@ -58,7 +58,7 @@ const Transactions = () => {
       return;
     }
     let searchItem;
-    ref ? searchItem = ref : searchItem = searchRef;
+    ref ? (searchItem = ref) : (searchItem = searchRef);
     let result = data.filter((row) => {
       return (
         row.ref.toLowerCase().includes(searchItem.toLowerCase()) ||
@@ -326,7 +326,7 @@ const Transactions = () => {
                                 </TableCell>
                                 <TableCell align="right">
                                   <img
-                                    src={`https://a1techapi.herokuapp.com/${historyRow.files[0].img}`}
+                                    src={`https://a1api.onrender.com/${historyRow.files[0].img}`}
                                     alt=""
                                     style={{ width: "50px", height: "50px" }}
                                   />
