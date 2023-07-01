@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const apiUrl = process.env.REACT_APP_API_URL + "api/";
+const apiUrl = "https://a1api.onrender.com/api/";
 
 export const uploadCarousel = async (data, options) => {
   try {
@@ -11,10 +11,45 @@ export const uploadCarousel = async (data, options) => {
 };
 
 export const products = async (data, options) => {
-  try
-  {
+  try {
     // console.log(data)
-    await axios.post( apiUrl + "upload/products", data, options );
+    await axios.post(apiUrl + "upload/products", data, options);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const restaurants = async (data, options) => {
+  try {
+    // console.log(data)
+    await axios.post(apiUrl + "upload/restaurant", data, options);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const menus = async (data, options) => {
+  try {
+    // console.log(data)
+    await axios.put(apiUrl + "upload/menu", data, options);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const supermarkets = async (data, options) => {
+  try {
+    // console.log(data)
+    await axios.post(apiUrl + "upload/supermarket", data, options);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const items = async (data, options) => {
+  try {
+    // console.log(data)
+    await axios.put(apiUrl + "upload/item", data, options);
   } catch (error) {
     throw error;
   }
@@ -22,9 +57,7 @@ export const products = async (data, options) => {
 
 export const addBlog = async (data, options) => {
   try {
-    await axios.post(process.env.REACT_APP_API_URL + "blog",
-      data
-    );
+    await axios.post("https://a1api.onrender.com/blog", data);
   } catch (error) {
     throw error;
   }
@@ -48,8 +81,6 @@ export const delProducts = async (data) => {
     throw error;
   }
 };
-
-
 
 // export const userSignUp = async (username, email, password) => {
 //   //console.log(data);

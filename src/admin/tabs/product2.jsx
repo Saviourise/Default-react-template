@@ -45,7 +45,7 @@ LinearProgressWithLabel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-const apiUrl = process.env.REACT_APP_API_URL + "api/";
+const apiUrl = "https://a1api.onrender.com/api/";
 
 const UpdateProduct = () => {
   const box = useRef(null);
