@@ -87,7 +87,7 @@ const Transactions = () => {
       await axios
         .get(apiUrl + "user/transaction/output")
         .then((data) => {
-          console.log(data.data);
+          // console.log(data.data);
           setTransactions(data.data);
 
           for (let j of data.data) {
@@ -221,225 +221,244 @@ const Transactions = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row, index) => (
-              <React.Fragment key={index}>
-                <TableRow
-                  sx={{ "& > *": { borderBottom: "unset" } }}
-                  id="tbrow"
-                >
-                  <TableCell>
-                    <IconButton
-                      aria-label="expand row"
-                      size="small"
-                      onClick={() => setOpen(!open)}
-                    >
-                      {open ? (
-                        <KeyboardArrowUpIcon />
-                      ) : (
-                        <KeyboardArrowDownIcon />
-                      )}
-                    </IconButton>
-                  </TableCell>
-                  <TableCell>{row.email}</TableCell>
-                  <TableCell>{row.phone}</TableCell>
-                  <TableCell>
-                    {row.address}, {row.state}
-                  </TableCell>
-                  <TableCell>{row.ref}</TableCell>
-                  <TableCell>{row.products}</TableCell>
-                  <TableCell>{row.date}</TableCell>
-                  <TableCell>{row.status}</TableCell>
-                  <TableCell>
-                    {row.status === "pending" ? (
-                      <>
-                        <Button
-                          sx={{ fontSize: "10px", margin: "0 5px" }}
-                          variant="contained"
-                          color="info"
-                          onClick={(e) => {
-                            e.target.innerHTML = "Processing...";
-                            axios
-                              .post(apiUrl + "user/transaction/processing", {
-                                email: row.email,
-                                ref: row.ref,
-                              })
-                              .then((data) => {
-                                e.target.innerHTML = "Confirm";
-
-                                getUsers();
-                                setAlertMessage("Transaction Processed");
-                                setAlertSeverity("success");
-                                handleClickAlert();
-                              })
-                              .catch((error) => {
-                                e.target.innerHTML = "Process";
-
-                                setAlertMessage("Error Completing Transaction");
-                                setAlertSeverity("error");
-                                handleClickAlert();
-                              });
-                          }}
-                        >
-                          Process
-                        </Button>
-                        <Button
-                          sx={{ fontSize: "10px", margin: "0 5px" }}
-                          variant="contained"
-                          color="error"
-                          onClick={(e) => {
-                            e.target.innerHTML = "Canceling...";
-                            axios
-                              .post(apiUrl + "user/transaction/cancel", {
-                                email: row.email,
-                                ref: row.ref,
-                              })
-                              .then((data) => {
-                                e.target.innerHTML = "Canceled";
-
-                                getUsers();
-                                setAlertMessage("Transaction Canceled");
-                                setAlertSeverity("success");
-                                handleClickAlert();
-                              })
-                              .catch((error) => {
-                                e.target.innerHTML = "Cancel";
-
-                                setAlertMessage("Error Completing Transaction");
-                                setAlertSeverity("error");
-                                handleClickAlert();
-                              });
-                          }}
-                        >
-                          Cancel
-                        </Button>
-                      </>
-                    ) : row.status === "processing" ? (
-                      <>
-                        <Button
-                          sx={{ fontSize: "10px", margin: "0 5px" }}
-                          variant="contained"
-                          color="success"
-                          onClick={(e) => {
-                            e.target.innerHTML = "Confirming...";
-                            axios
-                              .post(apiUrl + "user/transaction/confirm", {
-                                email: row.email,
-                                ref: row.ref,
-                              })
-                              .then((data) => {
-                                e.target.innerHTML = "Confirmed";
-
-                                getUsers();
-                                setAlertMessage("Transaction Completed");
-                                setAlertSeverity("success");
-                                handleClickAlert();
-                              })
-                              .catch((error) => {
-                                e.target.innerHTML = "Confirm";
-
-                                setAlertMessage("Error Completing Transaction");
-                                setAlertSeverity("error");
-                                handleClickAlert();
-                              });
-                          }}
-                        >
-                          Confirm
-                        </Button>
-                        <Button
-                          sx={{ fontSize: "10px", margin: "0 5px" }}
-                          variant="contained"
-                          color="error"
-                          onClick={(e) => {
-                            e.target.innerHTML = "Canceling...";
-                            axios
-                              .post(apiUrl + "user/transaction/cancel", {
-                                email: row.email,
-                                ref: row.ref,
-                              })
-                              .then((data) => {
-                                e.target.innerHTML = "Canceled";
-
-                                getUsers();
-                                setAlertMessage("Transaction Completed");
-                                setAlertSeverity("success");
-                                handleClickAlert();
-                              })
-                              .catch((error) => {
-                                e.target.innerHTML = "Cancel";
-
-                                setAlertMessage("Error Completing Transaction");
-                                setAlertSeverity("error");
-                                handleClickAlert();
-                              });
-                          }}
-                        >
-                          Cancel
-                        </Button>
-                      </>
-                    ) : (
-                      <></>
-                    )}
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell
-                    style={{ paddingBottom: 0, paddingTop: 0 }}
-                    colSpan={6}
+            {rows
+              .sort(function (a, b) {
+                var dateA = new Date(a.date),
+                  dateB = new Date(b.date);
+                return dateB - dateA;
+              })
+              .map((row, index) => (
+                <React.Fragment key={index}>
+                  <TableRow
+                    sx={{ "& > *": { borderBottom: "unset" } }}
+                    id="tbrow"
                   >
-                    <Collapse in={open} timeout="auto" unmountOnExit>
-                      <Box sx={{ margin: 1 }}>
-                        <Typography variant="h6" gutterBottom component="div">
-                          All Products Details
-                        </Typography>
-                        <Table size="small" aria-label="purchases">
-                          <TableHead>
-                            <TableRow>
-                              <TableCell>Product Name</TableCell>
-                              <TableCell>Quantity</TableCell>
-                              <TableCell align="right">Amount (₦)</TableCell>
-                              <TableCell align="right">
-                                Total price (₦)
-                              </TableCell>
-                              <TableCell align="right">Product Image</TableCell>
-                            </TableRow>
-                          </TableHead>
-                          <TableBody>
-                            {row.history.map((historyRow) => {
-                              return (
-                                <TableRow key={historyRow.product._id}>
-                                  <TableCell component="th" scope="row">
-                                    {historyRow.product.name}
-                                  </TableCell>
-                                  <TableCell>{historyRow.quantity}</TableCell>
-                                  <TableCell align="right">
-                                    {Number(
-                                      historyRow.product.price
-                                    ).toLocaleString()}
-                                  </TableCell>
-                                  <TableCell align="right">
-                                    {(
-                                      Number(historyRow.product.price) *
-                                      Number(historyRow.quantity)
-                                    ).toLocaleString()}
-                                  </TableCell>
-                                  <TableCell align="right">
-                                    <img
-                                      src={`https://a1api.onrender.com/${historyRow.product.files[0].img}`}
-                                      alt=""
-                                      style={{ width: "50px", height: "50px" }}
-                                    />
-                                  </TableCell>
-                                </TableRow>
-                              );
-                            })}
-                          </TableBody>
-                        </Table>
-                      </Box>
-                    </Collapse>
-                  </TableCell>
-                </TableRow>
-              </React.Fragment>
-            ))}
+                    <TableCell>
+                      <IconButton
+                        aria-label="expand row"
+                        size="small"
+                        onClick={() => setOpen(!open)}
+                      >
+                        {open ? (
+                          <KeyboardArrowUpIcon />
+                        ) : (
+                          <KeyboardArrowDownIcon />
+                        )}
+                      </IconButton>
+                    </TableCell>
+                    <TableCell>{row.email}</TableCell>
+                    <TableCell>{row.phone}</TableCell>
+                    <TableCell>
+                      {row.address}, {row.state}
+                    </TableCell>
+                    <TableCell>{row.ref}</TableCell>
+                    <TableCell>{row.products}</TableCell>
+                    <TableCell>{row.date}</TableCell>
+                    <TableCell>{row.status}</TableCell>
+                    <TableCell>
+                      {row.status === "pending" ? (
+                        <>
+                          <Button
+                            sx={{ fontSize: "10px", margin: "0 5px" }}
+                            variant="contained"
+                            color="info"
+                            onClick={(e) => {
+                              e.target.innerHTML = "Processing...";
+                              axios
+                                .post(apiUrl + "user/transaction/processing", {
+                                  email: row.email,
+                                  ref: row.ref,
+                                })
+                                .then((data) => {
+                                  e.target.innerHTML = "Confirm";
+
+                                  getUsers();
+                                  setAlertMessage("Transaction Processed");
+                                  setAlertSeverity("success");
+                                  handleClickAlert();
+                                })
+                                .catch((error) => {
+                                  e.target.innerHTML = "Process";
+
+                                  setAlertMessage(
+                                    "Error Completing Transaction"
+                                  );
+                                  setAlertSeverity("error");
+                                  handleClickAlert();
+                                });
+                            }}
+                          >
+                            Process
+                          </Button>
+                          <Button
+                            sx={{ fontSize: "10px", margin: "0 5px" }}
+                            variant="contained"
+                            color="error"
+                            onClick={(e) => {
+                              e.target.innerHTML = "Canceling...";
+                              axios
+                                .post(apiUrl + "user/transaction/cancel", {
+                                  email: row.email,
+                                  ref: row.ref,
+                                })
+                                .then((data) => {
+                                  e.target.innerHTML = "Canceled";
+
+                                  getUsers();
+                                  setAlertMessage("Transaction Canceled");
+                                  setAlertSeverity("success");
+                                  handleClickAlert();
+                                })
+                                .catch((error) => {
+                                  e.target.innerHTML = "Cancel";
+
+                                  setAlertMessage(
+                                    "Error Completing Transaction"
+                                  );
+                                  setAlertSeverity("error");
+                                  handleClickAlert();
+                                });
+                            }}
+                          >
+                            Cancel
+                          </Button>
+                        </>
+                      ) : row.status === "processing" ? (
+                        <>
+                          <Button
+                            sx={{ fontSize: "10px", margin: "0 5px" }}
+                            variant="contained"
+                            color="success"
+                            onClick={(e) => {
+                              e.target.innerHTML = "Confirming...";
+                              axios
+                                .post(apiUrl + "user/transaction/confirm", {
+                                  email: row.email,
+                                  ref: row.ref,
+                                })
+                                .then((data) => {
+                                  e.target.innerHTML = "Confirmed";
+
+                                  getUsers();
+                                  setAlertMessage("Transaction Completed");
+                                  setAlertSeverity("success");
+                                  handleClickAlert();
+                                })
+                                .catch((error) => {
+                                  e.target.innerHTML = "Confirm";
+
+                                  setAlertMessage(
+                                    "Error Completing Transaction"
+                                  );
+                                  setAlertSeverity("error");
+                                  handleClickAlert();
+                                });
+                            }}
+                          >
+                            Confirm
+                          </Button>
+                          <Button
+                            sx={{ fontSize: "10px", margin: "0 5px" }}
+                            variant="contained"
+                            color="error"
+                            onClick={(e) => {
+                              e.target.innerHTML = "Canceling...";
+                              axios
+                                .post(apiUrl + "user/transaction/cancel", {
+                                  email: row.email,
+                                  ref: row.ref,
+                                })
+                                .then((data) => {
+                                  e.target.innerHTML = "Canceled";
+
+                                  getUsers();
+                                  setAlertMessage("Transaction Completed");
+                                  setAlertSeverity("success");
+                                  handleClickAlert();
+                                })
+                                .catch((error) => {
+                                  e.target.innerHTML = "Cancel";
+
+                                  setAlertMessage(
+                                    "Error Completing Transaction"
+                                  );
+                                  setAlertSeverity("error");
+                                  handleClickAlert();
+                                });
+                            }}
+                          >
+                            Cancel
+                          </Button>
+                        </>
+                      ) : (
+                        <></>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell
+                      style={{ paddingBottom: 0, paddingTop: 0 }}
+                      colSpan={6}
+                    >
+                      <Collapse in={open} timeout="auto" unmountOnExit>
+                        <Box sx={{ margin: 1 }}>
+                          <Typography variant="h6" gutterBottom component="div">
+                            All Products Details
+                          </Typography>
+                          <Table size="small" aria-label="purchases">
+                            <TableHead>
+                              <TableRow>
+                                <TableCell>Product Name</TableCell>
+                                <TableCell>Quantity</TableCell>
+                                <TableCell align="right">Amount (₦)</TableCell>
+                                <TableCell align="right">
+                                  Total price (₦)
+                                </TableCell>
+                                <TableCell align="right">
+                                  Product Image
+                                </TableCell>
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                              {row.history.map((historyRow) => {
+                                return (
+                                  <TableRow key={historyRow.product._id}>
+                                    <TableCell component="th" scope="row">
+                                      {historyRow.product.name}
+                                    </TableCell>
+                                    <TableCell>{historyRow.quantity}</TableCell>
+                                    <TableCell align="right">
+                                      {Number(
+                                        historyRow.product.price
+                                      ).toLocaleString()}
+                                    </TableCell>
+                                    <TableCell align="right">
+                                      {(
+                                        Number(historyRow.product.price) *
+                                        Number(historyRow.quantity)
+                                      ).toLocaleString()}
+                                    </TableCell>
+                                    <TableCell align="right">
+                                      <img
+                                        src={`https://a1api.onrender.com/${historyRow.product.files[0].img}`}
+                                        alt=""
+                                        style={{
+                                          width: "50px",
+                                          height: "50px",
+                                        }}
+                                      />
+                                    </TableCell>
+                                  </TableRow>
+                                );
+                              })}
+                            </TableBody>
+                          </Table>
+                        </Box>
+                      </Collapse>
+                    </TableCell>
+                  </TableRow>
+                </React.Fragment>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>

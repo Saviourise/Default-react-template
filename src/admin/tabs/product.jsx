@@ -73,8 +73,8 @@ const Products = () => {
     image: [],
     price: "",
     specs: "",
-    categ: "",
-    comm: "",
+    category: "",
+    commission: "",
     type: "",
     negotiable: "",
   });
@@ -130,6 +130,8 @@ const Products = () => {
         return
       }
     }
+
+    console.log(product)
 
     const formData = new FormData();
 
@@ -293,9 +295,9 @@ const Products = () => {
                 <Select
                   labelId="demo-simple-select-helper-label"
                   id="demo-simple-select-helper"
-                  value={product.categ}
+                  value={product.category}
                   label="Product type"
-                  onChange={(e) => handleChange(e.target.value, "categ")}
+                  onChange={(e) => handleChange(e.target.value, "category")}
                   disabled={product.type === "" ? true : false}
                 >
                   <MenuItem value={"laptop"}>Laptop</MenuItem>
@@ -313,8 +315,8 @@ const Products = () => {
                 placeholder="Product commission"
                 multiline
                 size="small"
-                value={product.comm}
-                onChange={(e) => handleChange(e.target.value, "comm")}
+                value={product.commission}
+                onChange={(e) => handleChange(e.target.value, "commission")}
               />
               <br></br>
               <Button
