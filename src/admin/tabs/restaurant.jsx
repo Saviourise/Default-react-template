@@ -11,10 +11,20 @@ import PropTypes from "prop-types";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 import Snackbar from "@mui/material/Snackbar";
+import Slide from "@mui/material/Slide";
 import MuiAlert from "@mui/material/Alert";
 import axios from "axios";
+import Select from "@mui/material/Select";
+import Dialog from "@mui/material/Dialog";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -60,13 +70,23 @@ const Restaurant = () => {
     description: "",
   });
 
+  const [resToDel, setResToDel] = useState({
+    name: "",
+    file: "",
+    position: "",
+    location: "",
+    openHour: "",
+    closeHour: "",
+    description: "",
+  });
+
   const [menu, setMenu] = useState({
     name: "",
     images: "",
     price: "",
     quantity: "",
     description: "",
-    id: ""
+    id: "",
   });
 
   const [menuError, setMenuError] = useState({
@@ -90,7 +110,25 @@ const Restaurant = () => {
   const [progress, setProgress] = useState(0);
   const [openAlert, setOpenAlert] = useState(false);
   const [mess, setMess] = useState("");
+  const [open, setOpen] = useState(false);
+  const [open2, setOpen2] = useState(false);
   const [severity, setSeverity] = useState("success");
+
+  const handleClickOpen2 = () => {
+    setOpen2(true);
+  };
+
+  const handleClose2 = () => {
+    setOpen2(false);
+  };
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const apiUrl = "https://a1api.onrender.com/api/";
 
@@ -374,6 +412,13 @@ const Restaurant = () => {
               </Button>
             </Stack>
             <br></br>
+
+            <Stack>
+              <Button variant="contained" onClick={handleClickOpen}>
+                Delete Restaurant
+              </Button>
+            </Stack>
+            <br></br>
             {progress !== 0 ? (
               <>
                 {progress !== 100 ? <>Uploading</> : <>Uploaded</>}
@@ -423,7 +468,7 @@ const Restaurant = () => {
                   >
                     {restaurantsData &&
                       restaurantsData.map((restaurant) => (
-                        <MenuItem value={restaurant._id}>
+                        <MenuItem key={restaurant._id} value={restaurant._id}>
                           {restaurant.name}
                         </MenuItem>
                       ))}
@@ -525,7 +570,9 @@ const Restaurant = () => {
                 Add Menu
               </Button>
             </Stack>
-            <br></br>
+
+            <br />
+            <br />
             {progress !== 0 ? (
               <>
                 {progress !== 100 ? <>Uploading</> : <>Uploaded</>}
@@ -539,6 +586,123 @@ const Restaurant = () => {
           </div>
         )}
       </div>
+      <Dialog
+        fullScreen
+        open={open}
+        onClose={handleClose}
+        TransitionComponent={Transition}
+      >
+        <AppBar sx={{ position: "relative" }}>
+          <Toolbar>
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={handleClose}
+              aria-label="close"
+            >
+              <CloseIcon />
+            </IconButton>
+            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+              Delete a Restaurant
+            </Typography>
+            <Button
+              autoFocus
+              color="inherit"
+              onClick={() => {
+                if (resToDel) {
+                  return handleClickOpen2();
+                }
+              }}
+            >
+              Delete
+            </Button>
+          </Toolbar>
+        </AppBar>
+        <div
+          style={{
+            height: "100vh",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <FormControl sx={{ width: 300 }}>
+            <InputLabel id="demo-simple-select-helper-label">
+              Select Restaurant to delete
+            </InputLabel>
+            <Select
+              labelId="demo-simple-helper-label"
+              id="demo-simple-helper"
+              value={resToDel.name ? resToDel : ""}
+              label="Select Restaurant To Delete"
+              onChange={(e) => {
+                setResToDel(e.target.value);
+              }}
+              disabled={!Boolean(restaurantsData)}
+            >
+              {restaurantsData &&
+                restaurantsData.map((restaurant) => (
+                  <MenuItem key={restaurant._id} value={restaurant}>
+                    {restaurant.name}
+                  </MenuItem>
+                ))}
+            </Select>
+          </FormControl>
+        </div>
+      </Dialog>
+      <Dialog
+        open={open2}
+        onClose={handleClose2}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{`Delete ${resToDel?.name}?`}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Do you really want to delete this restaurant?{" "}
+            <b style={{ color: "red" }}>Note: This cannot be undone</b>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose2}>Close</Button>
+          <Button
+            autoFocus
+            onClick={async (e) => {
+              e.target.innerHTML = "Deleting";
+              try {
+                await axios
+                  .delete(
+                    `${apiUrl}delete/restaurant/${resToDel._id}`
+                  )
+                  .then((data) => {
+                    setMess(data.data);
+                    handleClose2();
+                    handleClose();
+                    setSeverity("success");
+                    setOpenAlert(true);
+                    getRestaurantsData();
+                  })
+                  .catch((err) => {
+                    setMess("could not delete restaurant, please try again");
+                    setSeverity("error");
+                    setOpenAlert(true);
+                    e.target.innerHTML = "Delete";
+                  });
+              } catch (error) {
+                setMess("Error in getting, please refresh the page");
+                setSeverity("error");
+                setOpenAlert(true);
+                e.target.innerHTML = "Delete";
+
+                return;
+              }
+            }}
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Stack spacing={2} sx={{ width: "100%" }}>
         <Snackbar
           open={openAlert}

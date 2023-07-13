@@ -66,7 +66,6 @@ const UpdateProduct = () => {
 
   const updateProduct = async (e) => {
     e.preventDefault();
-    console.log(product);
     const formData = new FormData();
 
     for (let el in product) {
@@ -174,7 +173,7 @@ const UpdateProduct = () => {
                 <Select
                   labelId="demo-simple-select-helper-label"
                   id="demo-simple-select-helper"
-                  value={product ? product.name : ""}
+                  value={product ? product : ""}
                   label="Select Product To Edit"
                   onChange={(e) => {
                     setProduct(e.target.value);

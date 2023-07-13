@@ -14,7 +14,17 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import Slide from "@mui/material/Slide";
 import axios from "axios";
+import Dialog from "@mui/material/Dialog";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -80,10 +90,38 @@ const Supermarket = () => {
     fileError: false,
   });
 
+  const [supToDel, setSupToDel] = useState({
+    name: "",
+    file: "",
+    position: "",
+    location: "",
+    openHour: "",
+    closeHour: "",
+    description: "",
+  });
+
   const [progress, setProgress] = useState(0);
   const [openAlert, setOpenAlert] = useState(false);
   const [mess, setMess] = useState("");
+  const [open, setOpen] = useState(false);
+  const [open2, setOpen2] = useState(false);
   const [severity, setSeverity] = useState("success");
+
+  const handleClickOpen2 = () => {
+    setOpen2(true);
+  };
+
+  const handleClose2 = () => {
+    setOpen2(false);
+  };
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const apiUrl = "https://a1api.onrender.com/api/";
 
@@ -91,7 +129,6 @@ const Supermarket = () => {
     try {
       const data = await axios.get(apiUrl + "get/supermarket");
       if (data.data) {
-        console.log(data.data);
         setSupermarketsData(data.data);
       } else {
         setMess("Error in getting Supermarkets, please refresh the page");
@@ -318,6 +355,12 @@ const Supermarket = () => {
               </Button>
             </Stack>
             <br></br>
+            <Stack>
+              <Button variant="contained" onClick={handleClickOpen}>
+                Delete Supermarket
+              </Button>
+            </Stack>
+            <br /><br />
             {progress !== 0 ? (
               <>
                 {progress !== 100 ? <>Uploading</> : <>Uploaded</>}
@@ -469,6 +512,7 @@ const Supermarket = () => {
                 Add Item
               </Button>
             </Stack>
+            
             <br></br>
             {progress !== 0 ? (
               <>
@@ -483,6 +527,121 @@ const Supermarket = () => {
           </div>
         )}
       </div>
+      <Dialog
+        fullScreen
+        open={open}
+        onClose={handleClose}
+        TransitionComponent={Transition}
+      >
+        <AppBar sx={{ position: "relative" }}>
+          <Toolbar>
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={handleClose}
+              aria-label="close"
+            >
+              <CloseIcon />
+            </IconButton>
+            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+              Delete a Supermarket
+            </Typography>
+            <Button
+              autoFocus
+              color="inherit"
+              onClick={() => {
+                if (supToDel) {
+                  return handleClickOpen2();
+                }
+              }}
+            >
+              Delete
+            </Button>
+          </Toolbar>
+        </AppBar>
+        <div
+          style={{
+            height: "100vh",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <FormControl sx={{ width: 300 }}>
+            <InputLabel id="demo-simple-select-helper-label">
+              Select Supermarket to delete
+            </InputLabel>
+            <Select
+              labelId="demo-simple-helper-label"
+              id="demo-simple-helper"
+              value={supToDel.name ? supToDel : ""}
+              label="Select Supermarket To Delete"
+              onChange={(e) => {
+                setSupToDel(e.target.value);
+              }}
+              disabled={!Boolean(SupermarketsData)}
+            >
+              {SupermarketsData &&
+                SupermarketsData.map((supermarket) => (
+                  <MenuItem key={supermarket._id} value={supermarket}>
+                    {supermarket.name}
+                  </MenuItem>
+                ))}
+            </Select>
+          </FormControl>
+        </div>
+      </Dialog>
+      <Dialog
+        open={open2}
+        onClose={handleClose2}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{`Delete ${supToDel?.name}?`}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Do you really want to delete this supermarket?{" "}
+            <b style={{ color: "red" }}>Note: This cannot be undone</b>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose2}>Close</Button>
+          <Button
+            autoFocus
+            onClick={async (e) => {
+              e.target.innerHTML = "Deleting";
+              try {
+                await axios
+                  .delete(`${apiUrl}delete/supermarket/${supToDel._id}`)
+                  .then((data) => {
+                    setMess(data.data);
+                    handleClose2();
+                    handleClose();
+                    setSeverity("success");
+                    setOpenAlert(true);
+                    getSupermarketsData();
+                  })
+                  .catch((err) => {
+                    setMess("could not delete supermarket, please try again");
+                    setSeverity("error");
+                    setOpenAlert(true);
+                    e.target.innerHTML = "Delete";
+                  });
+              } catch (error) {
+                setMess("Error in getting, please refresh the page");
+                setSeverity("error");
+                setOpenAlert(true);
+                e.target.innerHTML = "Delete";
+
+                return;
+              }
+            }}
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Stack spacing={2} sx={{ width: "100%" }}>
         <Snackbar
           open={openAlert}
