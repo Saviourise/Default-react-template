@@ -426,6 +426,13 @@ const Transactions = () => {
                                     <TableCell component="th" scope="row">
                                       {historyRow.product.name}
                                     </TableCell>
+                                    <TableCell>
+                                      {historyRow.product.restaurant
+                                        ? historyRow.product.restaurant
+                                        : historyRow.product.supermarket
+                                        ? historyRow.product.supermarket
+                                        : ""}
+                                    </TableCell>
                                     <TableCell>{historyRow.quantity}</TableCell>
                                     <TableCell align="right">
                                       {Number(
