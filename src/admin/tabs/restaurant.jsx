@@ -57,8 +57,10 @@ const Restaurant = () => {
   const box = useRef(null);
 
   const [restaurantsData, setRestaurantsData] = useState([]);
+  const [whichName, setWhich] = useState("Restaurant");
 
   const [type, setType] = useState("restaurant");
+  const [menuEdit, setMenuEdit] = useState(false);
 
   const [restaurant, setRestaurant] = useState({
     name: "",
@@ -68,6 +70,7 @@ const Restaurant = () => {
     openHour: "",
     closeHour: "",
     description: "",
+    menu: [],
   });
 
   const [resToDel, setResToDel] = useState({
@@ -80,8 +83,27 @@ const Restaurant = () => {
     description: "",
   });
 
+  const [menuToDel, setMenuToDel] = useState({
+    name: "",
+    images: "",
+    price: "",
+    quantity: "",
+    description: "",
+    id: "",
+  });
+
+  const [menuToEdit, setMenuToEdit] = useState({
+    name: "",
+    images: "",
+    price: "",
+    quantity: "",
+    description: "",
+    id: "",
+  });
+
   const [menu, setMenu] = useState({
     name: "",
+    editedName: "",
     images: "",
     price: "",
     quantity: "",
@@ -132,11 +154,44 @@ const Restaurant = () => {
 
   const apiUrl = "https://a1api.onrender.com/api/";
 
+  const editMenu = async () => {
+    console.log(menu)
+    const data = new FormData();
+    for (let i in menu) {
+      data.append(i, menu[i]);
+    }
+
+    data.append('files', menu.images);
+    try {
+      await axios
+        .put(`${apiUrl}edit/menu`, data)
+        .then((data) => {
+          setMess(data.data);
+          setSeverity("success");
+          setOpenAlert(true);
+          getRestaurantsData();
+        })
+        .catch((err) => {
+          console.log(err)
+          setMess("could not edit, please try again");
+          setSeverity("error");
+          setOpenAlert(true);
+        });
+    } catch (error) {
+      setMess("Error in getting, please refresh the page");
+      setSeverity("error");
+      setOpenAlert(true);
+
+      return;
+    }
+  };
+
   const getRestaurantsData = async () => {
     try {
       const data = await axios.get(apiUrl + "get/restaurant");
       if (data.data) {
         setRestaurantsData(data.data);
+        console.log(data.data);
       } else {
         setMess("Error in getting restaurants, please refresh the page");
         setSeverity("error");
@@ -414,7 +469,13 @@ const Restaurant = () => {
             <br></br>
 
             <Stack>
-              <Button variant="contained" onClick={handleClickOpen}>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  handleClickOpen();
+                  setWhich("Restaurant");
+                }}
+              >
                 Delete Restaurant
               </Button>
             </Stack>
@@ -474,6 +535,40 @@ const Restaurant = () => {
                       ))}
                   </Select>
                 </FormControl>
+                <br />
+                {menuEdit && (
+                  <FormControl size="small">
+                    <InputLabel id="demo-simple-select-helper-label">
+                      Select Menu to edit
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-helper-label"
+                      id="demo-simple-helper"
+                      value={menuToEdit.name ? menuToEdit : ""}
+                      label={`Select Menu To Edit`}
+                      onChange={(e) => {
+                        setMenuToEdit(e.target.value);
+                        setMenu({
+                          ...menu,
+                          ...e.target.value,
+                          editedName: e.target.value.name,
+                        });
+                      }}
+                      disabled={!Boolean(menu.id)}
+                    >
+                      {menu.id &&
+                        restaurantsData
+                          .filter((res) => {
+                            return res._id === menu.id;
+                          })[0]
+                          .menu.map((menu) => (
+                            <MenuItem key={menu.name} value={menu}>
+                              {menu.name}
+                            </MenuItem>
+                          ))}
+                    </Select>
+                  </FormControl>
+                )}
                 <br />
                 <TextField
                   id="menu-name"
@@ -565,9 +660,41 @@ const Restaurant = () => {
             )}
             <br />
             <br />
+            {menuEdit && (
+              <Stack>
+                <Button variant="contained" onClick={editMenu}>
+                  Save Menu
+                </Button>
+              </Stack>
+            )}
+            {!menuEdit && (
+              <Stack>
+                <Button variant="contained" onClick={uploadMenu}>
+                  Add Menu
+                </Button>
+              </Stack>
+            )}
+            <br />
             <Stack>
-              <Button variant="contained" onClick={uploadMenu}>
-                Add Menu
+              <Button
+                variant="contained"
+                onClick={() => {
+                  setMenuEdit(!menuEdit);
+                }}
+              >
+                {menuEdit ? "Upload" : "Edit"} Menu
+              </Button>
+            </Stack>
+            <br />
+            <Stack>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  handleClickOpen();
+                  setWhich("Menu");
+                }}
+              >
+                Delete Menu
               </Button>
             </Stack>
 
@@ -603,13 +730,16 @@ const Restaurant = () => {
               <CloseIcon />
             </IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              Delete a Restaurant
+              Delete a {whichName}
             </Typography>
             <Button
               autoFocus
               color="inherit"
               onClick={() => {
-                if (resToDel) {
+                if (whichName === "Menu" && menuToDel) {
+                  return handleClickOpen2();
+                }
+                if (whichName === "Restaurant" && resToDel) {
                   return handleClickOpen2();
                 }
               }}
@@ -629,13 +759,15 @@ const Restaurant = () => {
         >
           <FormControl sx={{ width: 300 }}>
             <InputLabel id="demo-simple-select-helper-label">
-              Select Restaurant to delete
+              Select Restaurant to delete {whichName === "Menu" && "from"}
             </InputLabel>
             <Select
               labelId="demo-simple-helper-label"
               id="demo-simple-helper"
               value={resToDel.name ? resToDel : ""}
-              label="Select Restaurant To Delete"
+              label={`Select ${whichName} To Delete ${
+                whichName === "Menu" && "from"
+              }`}
               onChange={(e) => {
                 setResToDel(e.target.value);
               }}
@@ -649,6 +781,36 @@ const Restaurant = () => {
                 ))}
             </Select>
           </FormControl>
+          {whichName === "Menu" && (
+            <>
+              <br></br>
+              <br></br>
+              <FormControl sx={{ width: 300 }}>
+                <InputLabel id="demo-simple-select-helper-label">
+                  Select Menu to delete
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-helper-label"
+                  id="demo-simple-helper"
+                  value={menuToDel.name ? menuToDel : ""}
+                  label={`Select ${whichName} To Delete ${
+                    whichName === "Menu" && "from"
+                  }`}
+                  onChange={(e) => {
+                    setMenuToDel(e.target.value);
+                  }}
+                  disabled={!Boolean(resToDel.menu)}
+                >
+                  {resToDel.menu &&
+                    resToDel.menu.map((menu) => (
+                      <MenuItem key={menu._id} value={menu}>
+                        {menu.name}
+                      </MenuItem>
+                    ))}
+                </Select>
+              </FormControl>
+            </>
+          )}
         </div>
       </Dialog>
       <Dialog
@@ -657,10 +819,13 @@ const Restaurant = () => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{`Delete ${resToDel?.name}?`}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{`Delete ${
+          whichName === "Restaurant" ? resToDel?.name : menuToDel?.name
+        }?`}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Do you really want to delete this restaurant?{" "}
+            Do you really want to delete this{" "}
+            {whichName === "Restaurant" ? "restaurant" : "menu"}?{" "}
             <b style={{ color: "red" }}>Note: This cannot be undone</b>
           </DialogContentText>
         </DialogContent>
@@ -673,7 +838,11 @@ const Restaurant = () => {
               try {
                 await axios
                   .delete(
-                    `${apiUrl}delete/restaurant/${resToDel._id}`
+                    `${apiUrl}delete/${
+                      whichName === "Restaurant" ? "restaurant" : "menu"
+                    }/${
+                      whichName === "Restaurant" ? resToDel._id : menuToDel.name
+                    }${whichName === "Menu" && `/${resToDel._id}`}`
                   )
                   .then((data) => {
                     setMess(data.data);
@@ -684,7 +853,7 @@ const Restaurant = () => {
                     getRestaurantsData();
                   })
                   .catch((err) => {
-                    setMess("could not delete restaurant, please try again");
+                    setMess("could not delete, please try again");
                     setSeverity("error");
                     setOpenAlert(true);
                     e.target.innerHTML = "Delete";
