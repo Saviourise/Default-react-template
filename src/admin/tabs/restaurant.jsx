@@ -155,7 +155,6 @@ const Restaurant = () => {
   const apiUrl = "https://a1api.onrender.com/api/";
 
   const editMenu = async () => {
-    console.log(menu)
     const data = new FormData();
     for (let i in menu) {
       data.append(i, menu[i]);
@@ -191,7 +190,6 @@ const Restaurant = () => {
       const data = await axios.get(apiUrl + "get/restaurant");
       if (data.data) {
         setRestaurantsData(data.data);
-        console.log(data.data);
       } else {
         setMess("Error in getting restaurants, please refresh the page");
         setSeverity("error");
@@ -229,8 +227,9 @@ const Restaurant = () => {
   };
 
   const uploadMenu = async () => {
+    console.log(menu)
     for (let item in menu) {
-      if (menu[item] === "") {
+      if (menu[item] === "" && item !== "editedName") {
         setError({ ...error, [item + "Error"]: true });
         return;
       }

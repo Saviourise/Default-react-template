@@ -409,6 +409,7 @@ const Transactions = () => {
                             <TableHead>
                               <TableRow>
                                 <TableCell>Product Name</TableCell>
+                                <TableCell>Seller</TableCell>
                                 <TableCell>Quantity</TableCell>
                                 <TableCell align="right">Amount (₦)</TableCell>
                                 <TableCell align="right">
@@ -431,7 +432,7 @@ const Transactions = () => {
                                         ? historyRow.product.restaurant
                                         : historyRow.product.supermarket
                                         ? historyRow.product.supermarket
-                                        : ""}
+                                        : "A2Z"}
                                     </TableCell>
                                     <TableCell>{historyRow.quantity}</TableCell>
                                     <TableCell align="right">
