@@ -77,6 +77,7 @@ const Products = () => {
     commission: "",
     type: "",
     negotiable: "",
+    normalPrice: "",
   });
 
   const [error, setError] = useState({
@@ -239,6 +240,23 @@ const Products = () => {
                 required
                 onChange={(e) => handleChange(e.target.value, "price")}
                 error={error.priceError}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">₦</InputAdornment>
+                  ),
+                }}
+              />
+              <br></br>
+              <TextField
+                id="product-normal-price"
+                label="Product normal price"
+                placeholder="Product normal price"
+                multiline
+                size="small"
+                value={product.normalPrice}
+                required
+                onChange={(e) => handleChange(e.target.value, "normalPrice")}
+                error={error.normalPriceError}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">₦</InputAdornment>

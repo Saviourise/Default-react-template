@@ -222,6 +222,25 @@ const UpdateProduct = () => {
               />
               <br></br>
               <TextField
+                id="product-normal-price"
+                label="Product normal price"
+                placeholder="Product normal price"
+                multiline
+                size="small"
+                disabled={!Boolean(product)}
+                onChange={(e) => {
+                  setProduct({ ...product, normalPrice: e.target.value });
+                }}
+                focused
+                value={product && product.normalPrice}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">₦</InputAdornment>
+                  ),
+                }}
+              />
+              <br></br>
+              <TextField
                 id="product-specification"
                 label="Product specification"
                 placeholder="Product specification"
