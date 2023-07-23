@@ -61,6 +61,7 @@ const Restaurant = () => {
 
   const [type, setType] = useState("restaurant");
   const [menuEdit, setMenuEdit] = useState(false);
+  const [restaurantEdit, setRestaurantEdit] = useState(false);
 
   const [restaurant, setRestaurant] = useState({
     name: "",
@@ -74,6 +75,17 @@ const Restaurant = () => {
   });
 
   const [resToDel, setResToDel] = useState({
+    name: "",
+    file: "",
+    position: "",
+    location: "",
+    openHour: "",
+    closeHour: "",
+    description: "",
+  });
+
+  const [restaurantToEdit, setRestaurantToEdit] = useState({
+    _id: "",
     name: "",
     file: "",
     position: "",
@@ -154,13 +166,47 @@ const Restaurant = () => {
 
   const apiUrl = "https://a1api.onrender.com/api/";
 
+  const editRestaurant = async () => {
+    const formData = new FormData();
+    for (let i in restaurant) {
+      formData.append(i, restaurant[i]);
+    }
+    try {
+      await axios
+        .put(
+          `${apiUrl}edit/restaurant/${restaurant._id}`,
+          formData
+        )
+        .then((data) => {
+          setMess(data.data);
+          handleClose2();
+          handleClose();
+          setSeverity("success");
+          setOpenAlert(true);
+          getRestaurantsData();
+        })
+        .catch((err) => {
+          console.log(err)
+          setMess("could not edit, please try again");
+          setSeverity("error");
+          setOpenAlert(true);
+        });
+    } catch (error) {
+      setMess("Error in editing, please refresh the page");
+      setSeverity("error");
+      setOpenAlert(true);
+
+      return;
+    }
+  };
+
   const editMenu = async () => {
     const data = new FormData();
     for (let i in menu) {
       data.append(i, menu[i]);
     }
 
-    data.append('files', menu.images);
+    data.append("files", menu.images);
     try {
       await axios
         .put(`${apiUrl}edit/menu`, data)
@@ -171,7 +217,7 @@ const Restaurant = () => {
           getRestaurantsData();
         })
         .catch((err) => {
-          console.log(err)
+          console.log(err);
           setMess("could not edit, please try again");
           setSeverity("error");
           setOpenAlert(true);
@@ -227,7 +273,7 @@ const Restaurant = () => {
   };
 
   const uploadMenu = async () => {
-    console.log(menu)
+    console.log(menu);
     for (let item in menu) {
       if (menu[item] === "" && item !== "editedName") {
         setError({ ...error, [item + "Error"]: true });
@@ -270,7 +316,7 @@ const Restaurant = () => {
 
   const uploadRestaurant = async () => {
     for (let item in restaurant) {
-      if (restaurant[item] === "") {
+      if (restaurant[item] === "" && item !== "position") {
         setError({ ...error, [item + "Error"]: true });
         return;
       }
@@ -298,7 +344,7 @@ const Restaurant = () => {
         for (let item in error) {
           setError({ ...error, [item]: false });
         }
-        //console.log(error)
+        console.log(error);
         setMess(error.response.data);
         setOpenAlert(true);
         setSeverity("error");
@@ -349,6 +395,38 @@ const Restaurant = () => {
                   justifyContent: "center",
                 }}
               >
+                {restaurantEdit && (
+                  <>
+                    <FormControl size="small">
+                      <InputLabel id="demo-simple-select-helper-label">
+                        Select Restaurant to edit
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-helper-label"
+                        id="demo-simple-helper"
+                        value={restaurantToEdit.name ? restaurantToEdit : ""}
+                        label={`Select Restaurant To Edit`}
+                        onChange={(e) => {
+                          setRestaurantToEdit(e.target.value);
+                          setRestaurant({
+                            ...restaurant,
+                            ...e.target.value,
+                            file: e.target.value.image,
+                          });
+                        }}
+                        disabled={!Boolean(restaurantsData)}
+                      >
+                        {restaurantsData &&
+                          restaurantsData.map((restaurant) => (
+                            <MenuItem key={restaurant.name} value={restaurant}>
+                              {restaurant.name}
+                            </MenuItem>
+                          ))}
+                      </Select>
+                    </FormControl>
+                    <br />
+                  </>
+                )}
                 <TextField
                   id="restaurant-name"
                   label="Restaurant name"
@@ -460,13 +538,34 @@ const Restaurant = () => {
             )}
             <br />
             <br />
+
+            <br></br>
+            {restaurantEdit && (
+              <Stack>
+                <Button variant="contained" onClick={editRestaurant}>
+                  Save Restaurant
+                </Button>
+              </Stack>
+            )}
+            {!restaurantEdit && (
+              <Stack>
+                <Button variant="contained" onClick={uploadRestaurant}>
+                  Add Restaurant
+                </Button>
+              </Stack>
+            )}
+            <br />
             <Stack>
-              <Button variant="contained" onClick={uploadRestaurant}>
-                Add Restaurant
+              <Button
+                variant="contained"
+                onClick={() => {
+                  setRestaurantEdit(!restaurantEdit);
+                }}
+              >
+                {restaurantEdit ? "Upload" : "Edit"} Restaurant
               </Button>
             </Stack>
-            <br></br>
-
+            <br />
             <Stack>
               <Button
                 variant="contained"
@@ -841,7 +940,7 @@ const Restaurant = () => {
                       whichName === "Restaurant" ? "restaurant" : "menu"
                     }/${
                       whichName === "Restaurant" ? resToDel._id : menuToDel.name
-                    }${whichName === "Menu" && `/${resToDel._id}`}`
+                    }${whichName === "Menu" ? `/${resToDel._id}` : ""}`
                   )
                   .then((data) => {
                     setMess(data.data);

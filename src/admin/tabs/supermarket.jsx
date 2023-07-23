@@ -61,6 +61,7 @@ const Supermarket = () => {
   const [type, setType] = useState("Supermarket");
   const [whichName, setWhich] = useState("Restaurant");
 
+  const [supermarketEdit, setSupermarketEdit] = useState(false);
   const [menuEdit, setMenuEdit] = useState(false);
 
   const [Supermarket, setSupermarket] = useState({
@@ -121,6 +122,13 @@ const Supermarket = () => {
     description: "",
   });
 
+  const [supermarketToEdit, setSupermarketToEdit] = useState({
+    _id: "",
+    name: "",
+    file: "",
+    description: "",
+  });
+
   const [progress, setProgress] = useState(0);
   const [openAlert, setOpenAlert] = useState(false);
   const [mess, setMess] = useState("");
@@ -145,6 +153,37 @@ const Supermarket = () => {
   };
 
   const apiUrl = "https://a1api.onrender.com/api/";
+
+  const editSupermarket = async () => {
+    const formData = new FormData();
+    for (let i in Supermarket) {
+      formData.append(i, Supermarket[i]);
+    }
+    try {
+      await axios
+        .put(`${apiUrl}edit/supermarket/${Supermarket._id}`, formData)
+        .then((data) => {
+          setMess(data.data);
+          handleClose2();
+          handleClose();
+          setSeverity("success");
+          setOpenAlert(true);
+          getSupermarketsData();
+        })
+        .catch((err) => {
+          console.log(err);
+          setMess("could not edit, please try again");
+          setSeverity("error");
+          setOpenAlert(true);
+        });
+    } catch (error) {
+      setMess("Error in editing, please refresh the page");
+      setSeverity("error");
+      setOpenAlert(true);
+
+      return;
+    }
+  };
 
   const editMenu = async () => {
     const data = new FormData();
@@ -339,6 +378,41 @@ const Supermarket = () => {
                   justifyContent: "center",
                 }}
               >
+                {supermarketEdit && (
+                  <>
+                    <FormControl size="small">
+                      <InputLabel id="demo-simple-select-helper-label">
+                        Select Supermarket to edit
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-helper-label"
+                        id="demo-simple-helper"
+                        value={supermarketToEdit.name ? supermarketToEdit : ""}
+                        label={`Select Restaurant To Edit`}
+                        onChange={(e) => {
+                          setSupermarketToEdit(e.target.value);
+                          setSupermarket({
+                            ...Supermarket,
+                            ...e.target.value,
+                            file: e.target.value.image,
+                          });
+                        }}
+                        disabled={!Boolean(SupermarketsData)}
+                      >
+                        {SupermarketsData &&
+                          SupermarketsData.map((Supermarket) => (
+                            <MenuItem
+                              key={Supermarket.name}
+                              value={Supermarket}
+                            >
+                              {Supermarket.name}
+                            </MenuItem>
+                          ))}
+                      </Select>
+                    </FormControl>
+                    <br />
+                  </>
+                )}
                 <TextField
                   id="Supermarket-name"
                   label="Supermarket name"
@@ -400,9 +474,29 @@ const Supermarket = () => {
             )}
             <br />
             <br />
+            {supermarketEdit && (
+              <Stack>
+                <Button variant="contained" onClick={editSupermarket}>
+                  Save Supermarket
+                </Button>
+              </Stack>
+            )}
+            {!supermarketEdit && (
+              <Stack>
+                <Button variant="contained" onClick={uploadSupermarket}>
+                  Add Supermarket
+                </Button>
+              </Stack>
+            )}
+            <br />
             <Stack>
-              <Button variant="contained" onClick={uploadSupermarket}>
-                Add Supermarket
+              <Button
+                variant="contained"
+                onClick={() => {
+                  setSupermarketEdit(!supermarketEdit);
+                }}
+              >
+                {supermarketEdit ? "Upload" : "Edit"} Supermarket
               </Button>
             </Stack>
             <br></br>
@@ -745,7 +839,8 @@ const Supermarket = () => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          `Delete {whichName === "Restaurant" ? supToDel?.name : menuToDel?.name}?`
+          `Delete{" "}
+          {whichName === "Restaurant" ? supToDel?.name : menuToDel?.name}?`
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
@@ -760,6 +855,7 @@ const Supermarket = () => {
             autoFocus
             onClick={async (e) => {
               e.target.innerHTML = "Deleting";
+
               try {
                 await axios
                   .delete(
@@ -767,7 +863,7 @@ const Supermarket = () => {
                       whichName === "Restaurant" ? "supermarket" : "item"
                     }/${
                       whichName === "Restaurant" ? supToDel._id : menuToDel.name
-                    }${whichName === "Menu" && `/${supToDel._id}`}`
+                    }${whichName === "Menu" ? `/${supToDel._id}` : ""}`
                   )
                   .then((data) => {
                     setMess(data.data);
@@ -778,6 +874,7 @@ const Supermarket = () => {
                     getSupermarketsData();
                   })
                   .catch((err) => {
+                    console.log(err);
                     setMess("could not delete supermarket, please try again");
                     setSeverity("error");
                     setOpenAlert(true);
