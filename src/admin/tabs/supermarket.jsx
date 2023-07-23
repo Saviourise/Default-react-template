@@ -169,6 +169,11 @@ const Supermarket = () => {
           setSeverity("success");
           setOpenAlert(true);
           getSupermarketsData();
+          setSupermarket({
+            name: "",
+            file: "",
+            description: "",
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -200,6 +205,13 @@ const Supermarket = () => {
           setSeverity("success");
           setOpenAlert(true);
           getSupermarketsData();
+          setItem({
+            name: "",
+            images: "",
+            price: "",
+            quantity: "",
+            description: "",
+          });
         })
         .catch((err) => {
           setMess("could not edit, please try again");
@@ -394,7 +406,6 @@ const Supermarket = () => {
                           setSupermarket({
                             ...Supermarket,
                             ...e.target.value,
-                            file: e.target.value.image,
                           });
                         }}
                         disabled={!Boolean(SupermarketsData)}

@@ -184,6 +184,16 @@ const Restaurant = () => {
           setSeverity("success");
           setOpenAlert(true);
           getRestaurantsData();
+          setRestaurant({
+            name: "",
+            file: "",
+            position: "",
+            location: "",
+            openHour: "",
+            closeHour: "",
+            description: "",
+            menu: [],
+          });
         })
         .catch((err) => {
           console.log(err)
@@ -215,6 +225,14 @@ const Restaurant = () => {
           setSeverity("success");
           setOpenAlert(true);
           getRestaurantsData();
+          setMenu({
+            name: "",
+            editedName: "",
+            images: "",
+            price: "",
+            quantity: "",
+            description: "",
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -411,7 +429,6 @@ const Restaurant = () => {
                           setRestaurant({
                             ...restaurant,
                             ...e.target.value,
-                            file: e.target.value.image,
                           });
                         }}
                         disabled={!Boolean(restaurantsData)}
