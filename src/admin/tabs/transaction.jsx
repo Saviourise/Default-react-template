@@ -84,6 +84,8 @@ const Transactions = () => {
     let history = [];
     let date;
     let name;
+    let time;
+    let deliveryFee;
     try {
       await axios
         .get(apiUrl + "user/transaction/output")
@@ -95,6 +97,8 @@ const Transactions = () => {
               let conDate = new Date(k.date);
               email = k.email;
               name = k.name ? k.name : k.email.split("@")[0];
+              time = k.time ? k.time : "Within 30 Minutes";
+              deliveryFee = k.deliveryFee ? k.deliveryFee : "300";
               phone = k.phone;
               ref = k.ref;
               products = k.product.length;
@@ -117,6 +121,8 @@ const Transactions = () => {
               ref: ref,
               date: date,
               name: name,
+              time: time,
+              deliveryFee: deliveryFee,
             });
           }
           for (let i of data.data) {
@@ -216,6 +222,8 @@ const Transactions = () => {
               <TableCell>Name</TableCell>
               <TableCell>Number</TableCell>
               <TableCell>Address</TableCell>
+              <TableCell>Time</TableCell>
+              <TableCell>Delivery Fee</TableCell>
               <TableCell>Transaction Ref</TableCell>
               <TableCell>Products ordered</TableCell>
               <TableCell>Date Ordered</TableCell>
@@ -255,6 +263,8 @@ const Transactions = () => {
                     <TableCell>
                       {row.address}, {row.state}
                     </TableCell>
+                    <TableCell>{row.time}</TableCell>
+                    <TableCell>{row.deliveryFee}</TableCell>
                     <TableCell>{row.ref}</TableCell>
                     <TableCell>{row.products}</TableCell>
                     <TableCell>{row.date}</TableCell>
