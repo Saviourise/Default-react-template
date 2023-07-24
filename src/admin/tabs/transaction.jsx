@@ -83,17 +83,18 @@ const Transactions = () => {
     let ref;
     let history = [];
     let date;
+    let name;
     try {
       await axios
         .get(apiUrl + "user/transaction/output")
         .then((data) => {
-          // console.log(data.data);
           setTransactions(data.data);
 
           for (let j of data.data) {
             for (let k of j.transaction) {
               let conDate = new Date(k.date);
               email = k.email;
+              name = k.name ? k.name : k.email.split("@")[0];
               phone = k.phone;
               ref = k.ref;
               products = k.product.length;
@@ -115,6 +116,7 @@ const Transactions = () => {
               phone: phone,
               ref: ref,
               date: date,
+              name: name,
             });
           }
           for (let i of data.data) {
@@ -211,6 +213,7 @@ const Transactions = () => {
             <TableRow>
               <TableCell />
               <TableCell>Email</TableCell>
+              <TableCell>Name</TableCell>
               <TableCell>Number</TableCell>
               <TableCell>Address</TableCell>
               <TableCell>Transaction Ref</TableCell>
@@ -247,6 +250,7 @@ const Transactions = () => {
                       </IconButton>
                     </TableCell>
                     <TableCell>{row.email}</TableCell>
+                    <TableCell>{row.name}</TableCell>
                     <TableCell>{row.phone}</TableCell>
                     <TableCell>
                       {row.address}, {row.state}
