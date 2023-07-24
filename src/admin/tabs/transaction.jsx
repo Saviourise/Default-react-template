@@ -91,14 +91,14 @@ const Transactions = () => {
         .get(apiUrl + "user/transaction/output")
         .then((data) => {
           setTransactions(data.data);
-
+          console.log(data.data)
           for (let j of data.data) {
             for (let k of j.transaction) {
               let conDate = new Date(k.date);
               email = k.email;
               name = k.name ? k.name : k.email.split("@")[0];
               time = k.time ? k.time : "Within 30 Minutes";
-              deliveryFee = k.deliveryFee ? k.deliveryFee : "300";
+              deliveryFee = k.deliveryFee ? k.deliveryFee : "0";
               phone = k.phone;
               ref = k.ref;
               products = k.product.length;
@@ -107,7 +107,7 @@ const Transactions = () => {
               landmark = k.landmark;
               status = k.status;
               history = k.product;
-              date = conDate.toLocaleDateString();
+              date = conDate.toLocaleString();
             }
             array.push({
               email: email,
