@@ -11,6 +11,9 @@ import PropTypes from "prop-types";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 import Snackbar from "@mui/material/Snackbar";
 import Slide from "@mui/material/Slide";
 import MuiAlert from "@mui/material/Alert";
@@ -72,6 +75,7 @@ const Restaurant = () => {
     closeHour: "",
     description: "",
     menu: [],
+    open: false,
   });
 
   const [resToDel, setResToDel] = useState({
@@ -93,6 +97,7 @@ const Restaurant = () => {
     openHour: "",
     closeHour: "",
     description: "",
+    open: false,
   });
 
   const [menuToDel, setMenuToDel] = useState({
@@ -173,10 +178,7 @@ const Restaurant = () => {
     }
     try {
       await axios
-        .put(
-          `${apiUrl}edit/restaurant/${restaurant._id}`,
-          formData
-        )
+        .put(`${apiUrl}edit/restaurant/${restaurant._id}`, formData)
         .then((data) => {
           setMess(data.data);
           handleClose2();
@@ -196,7 +198,7 @@ const Restaurant = () => {
           });
         })
         .catch((err) => {
-          console.log(err)
+          console.log(err);
           setMess("could not edit, please try again");
           setSeverity("error");
           setOpenAlert(true);
@@ -519,6 +521,26 @@ const Restaurant = () => {
                   onChange={(e) => handleChange(e.target.value, "closeHour")}
                 />
                 <br></br>
+                {restaurantEdit && (
+                  <>
+                    <FormGroup>
+                      <FormControlLabel
+                        required
+                        control={
+                          <Checkbox
+                            checked={restaurant.open}
+                            onChange={(e) => {
+                              handleChange(e.target.checked, "open");
+                              console.log(e.target.checked);
+                            }}
+                          />
+                        }
+                        label="Restaurant is Open"
+                      />
+                    </FormGroup>
+                    <br />
+                  </>
+                )}
                 <Button
                   variant="outlined"
                   component="label"
