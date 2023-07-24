@@ -124,7 +124,7 @@ const Transactions = () => {
           setPendingTransactions(pendingArray);
           setConfirmedTransactions(confirmedArray);
           setData(array);
-          setRows(array);
+          setRows(array.reverse());
         })
         .catch((error) => {
           console.log(error);
@@ -222,11 +222,11 @@ const Transactions = () => {
           </TableHead>
           <TableBody>
             {rows
-              .sort(function (a, b) {
-                var dateA = new Date(a.date),
-                  dateB = new Date(b.date);
-                return dateB - dateA;
-              })
+              // .sort(function (a, b) {
+              //   var dateA = new Date(a.date),
+              //     dateB = new Date(b.date);
+              //   return dateB - dateA;
+              // })
               .map((row, index) => (
                 <React.Fragment key={index}>
                   <TableRow
