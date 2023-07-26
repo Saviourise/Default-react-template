@@ -218,7 +218,7 @@ const Restaurant = () => {
       data.append(i, menu[i]);
     }
 
-    data.append("files", menu.images);
+    data.append("files", menu.files);
     try {
       await axios
         .put(`${apiUrl}edit/menu`, data)
@@ -776,7 +776,10 @@ const Restaurant = () => {
                     multiple
                     onChange={(e) => {
                       setProgress(0);
-                      handleChangeMenu(e.target.files, "images");
+                      handleChangeMenu(
+                        e.target.files,
+                        `${menuEdit ? "files" : "images"}`
+                      );
                     }}
                   />
                 </Button>

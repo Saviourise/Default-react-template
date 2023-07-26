@@ -196,7 +196,7 @@ const Supermarket = () => {
       data.append(i, item[i]);
     }
 
-    data.append("files", item.images);
+    data.append("files", item.files);
     try {
       await axios
         .put(`${apiUrl}edit/item`, data)
@@ -675,7 +675,10 @@ const Supermarket = () => {
                     multiple
                     onChange={(e) => {
                       setProgress(0);
-                      handleChangeItem(e.target.files, "images");
+                      handleChangeItem(
+                        e.target.files,
+                        `${menuEdit ? "files" : "images"}`
+                      );
                     }}
                   />
                 </Button>

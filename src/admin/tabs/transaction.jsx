@@ -386,7 +386,7 @@ const Transactions = () => {
                                   e.target.innerHTML = "Canceled";
 
                                   getUsers();
-                                  setAlertMessage("Transaction Completed");
+                                  setAlertMessage("Transaction Canceled");
                                   setAlertSeverity("success");
                                   handleClickAlert();
                                 })
@@ -394,7 +394,7 @@ const Transactions = () => {
                                   e.target.innerHTML = "Cancel";
 
                                   setAlertMessage(
-                                    "Error Completing Transaction"
+                                    "Error Canceling Transaction"
                                   );
                                   setAlertSeverity("error");
                                   handleClickAlert();
