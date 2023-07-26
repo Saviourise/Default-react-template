@@ -95,6 +95,7 @@ const Supermarket = () => {
     quantity: "",
     id: "",
     description: "",
+    files: [],
   });
 
   const [itemError, setItemError] = useState({
@@ -196,7 +197,11 @@ const Supermarket = () => {
       data.append(i, item[i]);
     }
 
-    data.append("files", item.files);
+    if (menu.files.length > 0) {
+      for (let i = 0; i < menu.files.length; i++) {
+        data.append("files", menu.files[i]);
+      }
+    }
     try {
       await axios
         .put(`${apiUrl}edit/item`, data)
@@ -211,6 +216,7 @@ const Supermarket = () => {
             price: "",
             quantity: "",
             description: "",
+            files: [],
           });
         })
         .catch((err) => {
@@ -685,7 +691,7 @@ const Supermarket = () => {
               </div>
             </Box>
             <br></br>
-            {item.images.length > 0 && (
+            {(item.images.length > 0 || item.files.length > 0) && (
               <div
                 style={{
                   display: "flex",
@@ -694,7 +700,8 @@ const Supermarket = () => {
                   alignItems: "center",
                 }}
               >
-                {item.images.length} item images selected
+                {item.files.length > 0 ? item.files.length : item.images.length}{" "}
+                item images selected
               </div>
             )}
             <br />

@@ -126,6 +126,7 @@ const Restaurant = () => {
     quantity: "",
     description: "",
     id: "",
+    files: [],
   });
 
   const [menuError, setMenuError] = useState({
@@ -218,10 +219,14 @@ const Restaurant = () => {
       data.append(i, menu[i]);
     }
 
-    data.append("files", menu.files);
+    if (menu.files.length > 0) {
+      for (let i = 0; i < menu.files.length; i++) {
+        data.append("files", menu.files[i]);
+      }
+    }
     try {
       await axios
-        .put(`${apiUrl}edit/menu`, data)
+        .put(`http://localhost:4000/api/edit/menu`, data)
         .then((data) => {
           setMess(data.data);
           setSeverity("success");
@@ -234,6 +239,7 @@ const Restaurant = () => {
             price: "",
             quantity: "",
             description: "",
+            files: [],
           });
         })
         .catch((err) => {
@@ -289,6 +295,7 @@ const Restaurant = () => {
   };
 
   const handleChangeMenu = (event, type) => {
+    console.log(type);
     setMenu({ ...menu, [type]: event });
   };
 
@@ -786,7 +793,7 @@ const Restaurant = () => {
               </div>
             </Box>
             <br></br>
-            {menu.images.length > 0 && (
+            {(menu.images.length > 0 || menu.files.length > 0) && (
               <div
                 style={{
                   display: "flex",
@@ -795,7 +802,8 @@ const Restaurant = () => {
                   alignItems: "center",
                 }}
               >
-                {menu.images.length} menu images selected
+                {menu.files.length > 0 ? menu.files.length : menu.images.length}{" "}
+                menu images selected
               </div>
             )}
             <br />

@@ -91,7 +91,6 @@ const Transactions = () => {
         .get(apiUrl + "user/transaction/output")
         .then((data) => {
           setTransactions(data.data);
-          console.log(data.data)
           for (let j of data.data) {
             for (let k of j.transaction) {
               let conDate = new Date(k.date);
