@@ -9,15 +9,40 @@
   font-family: "Source Sans Pro", sans-serif;
 }
 
-#overview {
-  display: grid;
-  grid-template-columns: 50% 50%;
-}
-
 .paper {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+}
+
+.userTable > div {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 25% 25% 10% 5% 10% 5%;
+  grid-column-gap: 10px;
+  justify-content: space-between;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+.userTable > div:not(:first-child) {
+  border-top: none;
+}
+
+.userTable > div:first-child {
+  background-color: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+.userTable > div:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.userTable h3 {
+  font-size: 1rem;
+  font-weight: 400;
+  text-transform: capitalize;
 }
 
 @media only screen and (max-width: 550px) {
