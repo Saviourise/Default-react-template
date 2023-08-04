@@ -226,7 +226,7 @@ const Restaurant = () => {
     }
     try {
       await axios
-        .put(`http://localhost:4000/api/edit/menu`, data)
+        .put(`${apiUrl}edit/menu`, data, singleFileOptions)
         .then((data) => {
           setMess(data.data);
           setSeverity("success");
@@ -249,7 +249,7 @@ const Restaurant = () => {
           setOpenAlert(true);
         });
     } catch (error) {
-      setMess("Error in getting, please refresh the page");
+      setMess("could not edit, please try again");
       setSeverity("error");
       setOpenAlert(true);
 

@@ -162,7 +162,11 @@ const Supermarket = () => {
     }
     try {
       await axios
-        .put(`${apiUrl}edit/supermarket/${Supermarket._id}`, formData)
+        .put(
+          `${apiUrl}edit/supermarket/${Supermarket._id}`,
+          formData,
+          singleFileOptions
+        )
         .then((data) => {
           setMess(data.data);
           handleClose2();
@@ -204,7 +208,7 @@ const Supermarket = () => {
     }
     try {
       await axios
-        .put(`${apiUrl}edit/item`, data)
+        .put(`${apiUrl}edit/item`, data, singleFileOptions)
         .then((data) => {
           setMess(data.data);
           setSeverity("success");
