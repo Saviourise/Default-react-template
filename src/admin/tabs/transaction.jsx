@@ -99,6 +99,11 @@ const Transactions = () => {
               name = k.name ? k.name : k.email.split("@")[0];
               time = k.time ? k.time : "Within 30 Minutes";
               deliveryFee = k.deliveryFee ? k.deliveryFee : "0";
+              deliveryMethod = k.deliveryMethod
+                ? k.deliveryMethod === "pickup"
+                  ? k.deliveryMethod
+                  : k.address
+                : k.address;
               phone = k.phone;
               ref = k.ref;
               products = k.product.length;
@@ -242,7 +247,7 @@ const Transactions = () => {
               .map((row, index) => (
                 <React.Fragment key={index}>
                   <TableRow
-                    sx={{ "& > *": { borderBottom: "unset", fontSize: 11 } }}
+                    sx={{ "& > *": { borderBottom: "unset", fontSize: 10 } }}
                     id="tbrow"
                   >
                     <TableCell>
@@ -261,14 +266,11 @@ const Transactions = () => {
                     <TableCell>{row.email}</TableCell>
                     <TableCell>{row.name}</TableCell>
                     <TableCell>{row.phone}</TableCell>
-                    <TableCell>
-                      {row.deliveryMethod &&
-                      row.deliveryMethod.toLowercase() === "pickup"
-                        ? "Pickup"
-                        : row.address}
-                    </TableCell>
+                    <TableCell>{row.deliveryMethod}</TableCell>
                     <TableCell>{row.time}</TableCell>
-                    <TableCell>{row.deliveryFee || "0"}</TableCell>
+                    <TableCell>
+                      {row.deliveryFee !== "false" ? row.deliveryFee : "0"}
+                    </TableCell>
                     <TableCell>{row.ref}</TableCell>
                     <TableCell>{row.products}</TableCell>
                     <TableCell>{row.date}</TableCell>

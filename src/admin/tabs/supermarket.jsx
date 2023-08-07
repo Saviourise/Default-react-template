@@ -201,9 +201,9 @@ const Supermarket = () => {
       data.append(i, item[i]);
     }
 
-    if (menu.files.length > 0) {
-      for (let i = 0; i < menu.files.length; i++) {
-        data.append("files", menu.files[i]);
+    if (item.files.length > 0) {
+      for (let i = 0; i < item.files.length; i++) {
+        data.append("files", item.files[i]);
       }
     }
     try {
