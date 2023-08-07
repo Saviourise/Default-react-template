@@ -86,6 +86,7 @@ const Transactions = () => {
     let name;
     let time;
     let deliveryFee;
+    let deliveryMethod;
     try {
       await axios
         .get(apiUrl + "user/transaction/output")
@@ -122,6 +123,7 @@ const Transactions = () => {
               name: name,
               time: time,
               deliveryFee: deliveryFee,
+              deliveryMethod: deliveryMethod,
             });
           }
           for (let i of data.data) {
@@ -215,7 +217,7 @@ const Transactions = () => {
       <TableContainer component={Paper}>
         <Table aria-label="collapsible table">
           <TableHead id="thead">
-            <TableRow>
+            <TableRow sx={{ fontSize: 12 }}>
               <TableCell />
               <TableCell>Email</TableCell>
               <TableCell>Name</TableCell>
@@ -240,7 +242,7 @@ const Transactions = () => {
               .map((row, index) => (
                 <React.Fragment key={index}>
                   <TableRow
-                    sx={{ "& > *": { borderBottom: "unset" } }}
+                    sx={{ "& > *": { borderBottom: "unset", fontSize: 11 } }}
                     id="tbrow"
                   >
                     <TableCell>
@@ -260,10 +262,13 @@ const Transactions = () => {
                     <TableCell>{row.name}</TableCell>
                     <TableCell>{row.phone}</TableCell>
                     <TableCell>
-                      {row.address}, {row.state}
+                      {row.deliveryMethod &&
+                      row.deliveryMethod.toLowercase() === "pickup"
+                        ? "Pickup"
+                        : row.address}
                     </TableCell>
                     <TableCell>{row.time}</TableCell>
-                    <TableCell>{row.deliveryFee}</TableCell>
+                    <TableCell>{row.deliveryFee || "0"}</TableCell>
                     <TableCell>{row.ref}</TableCell>
                     <TableCell>{row.products}</TableCell>
                     <TableCell>{row.date}</TableCell>

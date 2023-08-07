@@ -115,7 +115,7 @@ const Admin = () => {
               /> */}
               <Tab label="Restaurant" value="restaurant" />
               <Tab label="Supermarket" value="supermarket" />
-              <Tab label="Transactions" value="transactions" />
+              <Tab label="Orders" value="transactions" />
               <Tab label="Add / Remove Admin" value="admincontrol" />
               <Tab
                 label="Affiliates"
