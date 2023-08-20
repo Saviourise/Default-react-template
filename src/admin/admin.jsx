@@ -17,6 +17,7 @@ import Transactions from "./tabs/transaction";
 import UpdateProduct from "./tabs/product2";
 import Restaurant from "./tabs/restaurant";
 import Supermarket from "./tabs/supermarket";
+import Ads from "./tabs/Ads";
 
 const Admin = () => {
   const stack = useRef(null);
@@ -26,7 +27,7 @@ const Admin = () => {
 
   //console.log(state)
   let navigate = useNavigate();
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState("overview");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -47,11 +48,11 @@ const Admin = () => {
         //console.log( data );
         if (data.error) {
           if (data.error.message) {
-            return navigate(`/admin`, {
+            return navigate(`/`, {
               state: "Session expired! Login again to continue",
             });
           }
-          return navigate(`/admin`, { state: data.message });
+          return navigate(`/`, { state: data.message });
         }
 
         if (data.message) {
@@ -66,7 +67,7 @@ const Admin = () => {
       })
       .catch((error) => {
         //console.log(error)
-        return navigate(`/admin`, { state: error.message });
+        return navigate(`/`, { state: error.message });
       });
     //stack.current.style.display = "none";
   }, [params, state, value]);
@@ -97,7 +98,7 @@ const Admin = () => {
               selectionFollowsFocus
             >
               <Tab label="Overview" value="overview" />
-              <Tab label="Add / Remove product" value="product" />
+              <Tab label="Product" value="product" />
               <Tab label="Update product" value="product2" />
               {/* <Tab
                 label="Customer care"
@@ -116,7 +117,7 @@ const Admin = () => {
               <Tab label="Restaurant" value="restaurant" />
               <Tab label="Supermarket" value="supermarket" />
               <Tab label="Orders" value="transactions" />
-              <Tab label="Add / Remove Admin" value="admincontrol" />
+              <Tab label="Ads" value="ads" />
               <Tab
                 label="Affiliates"
                 onFocus={() => navigate("/admin/affiliates", { state: token })}
@@ -142,7 +143,9 @@ const Admin = () => {
           <TabPanel value="blog">
             <Blog />
           </TabPanel>
-          <TabPanel value="admincontrol">Admin Control</TabPanel>
+          <TabPanel value="ads">
+            <Ads />
+          </TabPanel>
           <TabPanel value="transactions">
             <Transactions />{" "}
           </TabPanel>

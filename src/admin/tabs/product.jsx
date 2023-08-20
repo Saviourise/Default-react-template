@@ -76,8 +76,9 @@ const Products = () => {
     category: "",
     commission: "",
     type: "",
-    negotiable: "",
+    // negotiable: "",
     normalPrice: "",
+    blackFriday: false,
   });
 
   const [error, setError] = useState({
@@ -132,7 +133,7 @@ const Products = () => {
       }
     }
 
-    console.log(product)
+    // console.log(product)
 
     const formData = new FormData();
 
@@ -266,17 +267,17 @@ const Products = () => {
               <br></br>
               <FormControl size="small">
                 <InputLabel id="demo-simple-select-helper-label">
-                  Is this product negotiable?
+                  Is this product part of black friday?
                 </InputLabel>
                 <Select
                   labelId="demo-simple-select-helper-label"
                   id="demo-simple-select-helper"
-                  value={product.negotiable}
-                  label="Product type"
-                  onChange={(e) => handleChange(e.target.value, "negotiable")}
+                  value={product.blackFriday}
+                  label="Product Black friday"
+                  onChange={(e) => handleChange(e.target.value, "blackFriday")}
                 >
-                  <MenuItem value={"yes"}>Yes</MenuItem>
-                  <MenuItem value={"no"}>No</MenuItem>
+                  <MenuItem value={true}>Yes</MenuItem>
+                  <MenuItem value={false}>No</MenuItem>
                 </Select>
               </FormControl>
               <br></br>

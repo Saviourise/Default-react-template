@@ -63,6 +63,22 @@ export const addBlog = async (data, options) => {
   }
 };
 
+export const addAds = async (data, options) => {
+  try {
+    await axios.post("https://a1api.onrender.com/ads", data);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const removeAds = async (id, options) => {
+  try {
+    await axios.delete(`https://a1api.onrender.com/ads/${id}`);
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const delProducts = async (data) => {
   //console.log(data);
   data = JSON.stringify({

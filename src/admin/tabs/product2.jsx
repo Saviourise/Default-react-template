@@ -76,8 +76,8 @@ const UpdateProduct = () => {
         }
       }
       formData.append(el, product[el]);
-      // console.log(product[el]);
     }
+
     try {
       await axios
         .post(apiUrl + "update/products", formData, singleFileOptions)
@@ -239,6 +239,25 @@ const UpdateProduct = () => {
                   ),
                 }}
               />
+              <br></br>
+              <FormControl size="small">
+                <InputLabel id="demo-simple-select-helper-label">
+                  Is this product part of black friday?
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-helper-label"
+                  disabled={!Boolean(product)}
+                  id="product-black-friday"
+                  value={product && (product.blackFriday ? product.blackFriday : false)}
+                  label="Product Black Friday"
+                  onChange={(e) =>
+                    setProduct({ ...product, blackFriday: e.target.value })
+                  }
+                >
+                  <MenuItem value={true}>Yes</MenuItem>
+                  <MenuItem value={false}>No</MenuItem>
+                </Select>
+              </FormControl>
               <br></br>
               <TextField
                 id="product-specification"
