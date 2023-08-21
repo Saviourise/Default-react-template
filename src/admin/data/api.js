@@ -71,6 +71,14 @@ export const addAds = async (data, options) => {
   }
 };
 
+export const changeBlackFriday = async (data, options) => {
+  try {
+    await axios.post("https://a1api.onrender.com/blackfriday", data);
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const removeAds = async (id, options) => {
   try {
     await axios.delete(`https://a1api.onrender.com/ads/${id}`);
