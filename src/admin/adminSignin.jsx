@@ -45,7 +45,7 @@ const AdminSignin = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         setLoading(false);
         if (data.error) {
           //console.log(error)
@@ -61,6 +61,7 @@ const AdminSignin = () => {
         }
 
         if (data.token) {
+          localStorage.setItem("adminkey", data.token);
           return navigate(`/admin`, { state: data.token });
         }
       })

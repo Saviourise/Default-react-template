@@ -19,6 +19,7 @@ import Restaurant from "./tabs/restaurant";
 import Supermarket from "./tabs/supermarket";
 import Ads from "./tabs/Ads";
 import BlackFriday from "./tabs/blackfriday";
+import Affiliate from "./tabs/Affiliate";
 
 const Admin = () => {
   const stack = useRef(null);
@@ -120,11 +121,7 @@ const Admin = () => {
               <Tab label="Orders" value="transactions" />
               <Tab label="Ads" value="ads" />
               <Tab label="Black Friday" value="blackfriday" />
-              <Tab
-                label="Affiliates"
-                onFocus={() => navigate("/admin/affiliates", { state: token })}
-                value="affiliates"
-              />
+              <Tab label="Affiliates" value="affiliates" />
               <Tab
                 label="Blog"
                 onFocus={() => navigate("/admin/blog", { state: token })}
@@ -163,7 +160,9 @@ const Admin = () => {
           <TabPanel value="product2">
             <UpdateProduct />{" "}
           </TabPanel>
-          <TabPanel value="affiliates">Affiliates</TabPanel>
+          <TabPanel value="affiliates">
+            <Affiliate />
+          </TabPanel>
           {/* <TabPanel value="customercare">Customercare</TabPanel> */}
           <TabPanel value="product">
             <Products />

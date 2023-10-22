@@ -1,0 +1,58 @@
+.affiliate-cards {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+.affiliate-cards > article {
+  flex: 1 1 300px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: blueviolet;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.affiliate-cards > article > h3 {
+  color: white;
+}
+
+.affiliate-cards > article > p {
+  color: rgb(211, 207, 255);
+}
+
+.confirm-btn,
+.reject-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  height: 40px;
+  background: green;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.confirm-btn:hover,
+.reject-btn:hover {
+  transform: scale(1.05);
+}
+
+.confirm-btn:disabled,
+.reject-btn:disabled {
+  background: grey;
+  cursor: not-allowed;
+}
+
+.confirm-btn:disabled:hover,
+.reject-btn:disabled:hover {
+  transform: scale(1);
+}
+
+.reject-btn {
+  background: red;
+}
