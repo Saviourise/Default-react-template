@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const apiUrl = "https://a1api.onrender.com/api/";
+// const apiUrl = "http://localhost:4000/api/";
 
 export const uploadCarousel = async (data, options) => {
   try {
@@ -15,6 +16,7 @@ export const products = async (data, options) => {
     // console.log(data)
     await axios.post(apiUrl + "upload/products", data, options);
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };

@@ -21,7 +21,8 @@ const columns = [
   },
 ];
 
-const apiUrl = "https://a1api.onrender.com/api/";
+// const apiUrl = "https://a1api.onrender.com/api/";
+const apiUrl = "http://localhost:4000/api/";
 
 const Affiliate = () => {
   const [withdrawals, setWithdrawals] = React.useState([]);
@@ -108,11 +109,18 @@ const Affiliate = () => {
 
   const changeWithdrawalstatus = async (status) => {
     // console.log(selectedRows, status);
+
     selectedRows.map(async (id) => {
       await axios
         .patch(
           apiUrl + "admin/withdrawals",
-          { status: status, id: id },
+          {
+            status: status,
+            id: id,
+            email: withdrawals.find((wi) => {
+              return wi.id === id;
+            }).email,
+          },
           {
             headers: { "auth-token": localStorage.getItem("adminkey") },
           }
