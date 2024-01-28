@@ -21,8 +21,8 @@ const columns = [
   },
 ];
 
-// const apiUrl = "https://a1api.onrender.com/api/";
-const apiUrl = "http://localhost:4000/api/";
+const apiUrl = "https://a1api.onrender.com/api/";
+// const apiUrl = "http://localhost:4000/api/";
 
 const Affiliate = () => {
   const [withdrawals, setWithdrawals] = React.useState([]);
